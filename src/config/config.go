@@ -8,8 +8,11 @@ import (
 )
 
 type AppConfig struct {
-	BotToken            string `env:"BOT_TOKEN"`
-	OpenaiSessionCookie string `env:"OPENAI_SESSION_COOKIE"`
+	BotToken            string  `env:"BOT_TOKEN"`
+	BotTimeout          int     `env:"BOT_TIMEOUT"`
+	BotDebug            bool    `env:"BOT_DEBUG"`
+	AllowdUsers         []int64 `env:"ALLOWED_USERS"`
+	OpenaiSessionCookie string  `env:"OPENAI_SESSION_COOKIE"`
 }
 
 func init() {

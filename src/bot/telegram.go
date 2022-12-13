@@ -5,6 +5,7 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 
+	"github.com/Walker088/chatgpt_bot_dongato/src/chatgpt"
 	"github.com/Walker088/chatgpt_bot_dongato/src/config"
 	"github.com/Walker088/chatgpt_bot_dongato/src/utils"
 )
@@ -13,9 +14,10 @@ type Bot struct {
 	AllowedUsers []int64
 	Api          *tgbotapi.BotAPI
 	Timeout      int
+	engine       chatgpt.ChatGPT
 }
 
-func NewBot(cfg *config.AppConfig) (*Bot, error) {
+func NewBot(engine chatgpt.ChatGPT, cfg *config.AppConfig) (*Bot, error) {
 	botapi, err := tgbotapi.NewBotAPI(cfg.BotToken)
 	if err != nil {
 		return nil, err
@@ -27,6 +29,7 @@ func NewBot(cfg *config.AppConfig) (*Bot, error) {
 		AllowedUsers: cfg.AllowdUsers,
 		Api:          botapi,
 		Timeout:      cfg.BotTimeout,
+		engine:       engine,
 	}, nil
 }
 
@@ -38,7 +41,7 @@ func (b *Bot) GetUpdatesChan() tgbotapi.UpdatesChannel {
 
 func (b *Bot) HandleUpdate(update tgbotapi.Update) {
 	var (
-		//updateText      = update.Message.Text
+		updateText      = update.Message.Text
 		updateChatID    = update.Message.Chat.ID
 		updateMessageID = update.Message.MessageID
 		updateUserID    = update.Message.From.ID
@@ -49,8 +52,8 @@ func (b *Bot) HandleUpdate(update tgbotapi.Update) {
 		replyMsg := tgbotapi.NewMessage(updateChatID, reply)
 		_, _ = b.Api.Send(replyMsg)
 	} else {
-		var reply = "I am Don Gato, and I am having trouble to get responses from chatgpt"
-		replyMsg := tgbotapi.NewMessage(updateChatID, reply)
+		var reply, _ = b.engine.AskQuestion(updateText)
+		replyMsg := tgbotapi.NewMessage(updateChatID, string(reply))
 		replyMsg.ReplyToMessageID = updateMessageID
 		_, _ = b.Api.Send(replyMsg)
 	}

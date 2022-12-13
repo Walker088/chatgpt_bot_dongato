@@ -7,12 +7,19 @@ import (
 	"syscall"
 
 	b "github.com/Walker088/chatgpt_bot_dongato/src/bot"
+	w "github.com/Walker088/chatgpt_bot_dongato/src/chatgpt/web"
 	"github.com/Walker088/chatgpt_bot_dongato/src/config"
 )
 
 func main() {
 	cfg := config.GetAppConfig()
-	bot, err := b.NewBot(cfg)
+
+	engine, err := w.NewEngine(cfg.OpenaiSessionCookie)
+	if err != nil {
+		log.Fatalf("Couldn't start chatgpt engine: %v", err)
+	}
+
+	bot, err := b.NewBot(engine, cfg)
 	if err != nil {
 		log.Fatalf("Couldn't start Telegram bot: %v", err)
 	}

@@ -1,5 +1,5 @@
 package chatgpt
 
 type ChatGPT interface {
-	AskQuestion(question string) ([]byte, error)
+	AskQuestion(chatId int64, question string) ([]byte, error)
 }

@@ -13,6 +13,7 @@ type AppConfig struct {
 	BotDebug            bool    `env:"BOT_DEBUG"`
 	AllowdUsers         []int64 `env:"ALLOWED_USERS"`
 	OpenaiSessionCookie string  `env:"OPENAI_SESSION_COOKIE"`
+	OpenaiCfClearance   string  `env:"OPENAI_CF_CLEARANCE"`
 }
 
 func init() {

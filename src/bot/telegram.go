@@ -54,12 +54,18 @@ func (b *Bot) HandleUpdate(update tgbotapi.Update) {
 		var reply = "You are not allowed to use the bot, please contact the provider for further info ヾ(=ﾟ･ﾟ=)ﾉ"
 		replyMsg := tgbotapi.NewMessage(updateChatID, reply)
 		_, _ = b.api.Send(replyMsg)
-	} else {
-		var reply, _ = b.engine.AskQuestion(updateText)
-		replyMsg := tgbotapi.NewMessage(updateChatID, string(reply))
+		return
+	}
+	var reply, err = b.engine.AskQuestion(updateChatID, updateText)
+	if err != nil {
+		replyMsg := tgbotapi.NewMessage(updateChatID, err.Error())
 		replyMsg.ReplyToMessageID = updateMessageID
 		_, _ = b.api.Send(replyMsg)
+		return
 	}
+	replyMsg := tgbotapi.NewMessage(updateChatID, string(reply))
+	replyMsg.ReplyToMessageID = updateMessageID
+	_, _ = b.api.Send(replyMsg)
 }
 
 func (b *Bot) Stop() {

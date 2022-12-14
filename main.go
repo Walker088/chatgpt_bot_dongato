@@ -14,7 +14,7 @@ import (
 func main() {
 	cfg := config.GetAppConfig()
 
-	engine, err := w.NewEngine(cfg.OpenaiSessionCookie)
+	engine, err := w.NewEngine(cfg.OpenaiSessionCookie, cfg.OpenaiCfClearance)
 	if err != nil {
 		log.Fatalf("Couldn't start chatgpt engine: %v", err)
 	}

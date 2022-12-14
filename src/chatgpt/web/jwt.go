@@ -13,7 +13,7 @@ const (
 	REFRESH_TOKEN_URL = "https://chat.openai.com/api/auth/session"
 )
 
-type SessionResult struct {
+type RefreshTokenResp struct {
 	Err         string `json:"error"`
 	Expires     string `json:"expires"`
 	AccessToken string `json:"accessToken"`
@@ -69,25 +69,25 @@ func (j *JwtToken) refreshJwt() (string, error) {
 	}
 	defer res.Body.Close()
 
-	var result SessionResult
-	err = json.NewDecoder(res.Body).Decode(&result)
+	var rtp RefreshTokenResp
+	err = json.NewDecoder(res.Body).Decode(&rtp)
 	if err != nil {
 		return "", fmt.Errorf("[RefreshJwt] failed to decode response: %v", err)
 	}
 
-	accessToken := result.AccessToken
+	accessToken := rtp.AccessToken
 	if accessToken == "" {
 		return "", errors.New("[RefreshJwt] unauthorized")
 	}
-	if result.Err != "" {
-		if result.Err == "RefreshAccessTokenError" {
+	if rtp.Err != "" {
+		if rtp.Err == "RefreshAccessTokenError" {
 			return "", errors.New("[RefreshJwt] session token has expired")
 		}
 
-		return "", errors.New(result.Err)
+		return "", errors.New(rtp.Err)
 	}
 
-	expiryTime, err := time.Parse(time.RFC3339, result.Expires)
+	expiryTime, err := time.Parse(time.RFC3339, rtp.Expires)
 	if err != nil {
 		return "", fmt.Errorf("[RefreshJwt] failed to parse expiry time: %v", err)
 	}

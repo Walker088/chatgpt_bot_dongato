@@ -7,14 +7,16 @@ import (
 	"syscall"
 
 	b "github.com/Walker088/chatgpt_bot_dongato/src/bot"
-	w "github.com/Walker088/chatgpt_bot_dongato/src/chatgpt/web"
+	//w "github.com/Walker088/chatgpt_bot_dongato/src/chatgpt/web"
+	a "github.com/Walker088/chatgpt_bot_dongato/src/chatgpt/api"
 	"github.com/Walker088/chatgpt_bot_dongato/src/config"
 )
 
 func main() {
 	cfg := config.GetAppConfig()
 
-	engine, err := w.NewEngine(cfg.OpenaiSessionCookie, cfg.OpenaiCfClearance)
+	//engine, err := w.NewEngine(cfg.OpenaiSessionCookie, cfg.OpenaiCfClearance)
+	engine, err := a.NewEngine(cfg.OpenaiApiKey)
 	if err != nil {
 		log.Fatalf("Couldn't start chatgpt engine: %v", err)
 	}

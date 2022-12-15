@@ -1,6 +1,6 @@
 
 dockerRun() {
-    docker run -d -it --name dongato cloud.canister.io:5000/walker088/chatgpt_bot_dongato
+    docker run -d -it -v "$(pwd)/.project.env:/.project.env" --name dongato cloud.canister.io:5000/walker088/chatgpt_bot_dongato
 }
 dockerStop() {
     docker stop dongato

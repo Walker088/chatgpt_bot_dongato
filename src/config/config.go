@@ -14,6 +14,7 @@ type AppConfig struct {
 	AllowdUsers         []int64 `env:"ALLOWED_USERS"`
 	OpenaiSessionCookie string  `env:"OPENAI_SESSION_COOKIE"`
 	OpenaiCfClearance   string  `env:"OPENAI_CF_CLEARANCE"`
+	OpenaiApiKey        string  `env:"OPENAI_API_KEY"`
 }
 
 func init() {
